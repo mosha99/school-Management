@@ -1,0 +1,103 @@
+﻿@model school_Management.Models.serch
+
+@{
+    ViewBag.Title = "index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark ">
+
+    @using (Html.BeginForm("Searchs", "Default", FormMethod.Post, new { @class = "form-inline " }))
+    {
+        <div id="rs" style="position:relative;">
+            <input id="q" class="form-control mr-sm-2" style="margin-right:0;" name="serch" type="text" placeholder="Search">
+            <ul id="SearchResualt" class="list-group"></ul>
+        </div>
+        <button class="btn btn-success" type="submit">Search</button>
+    }
+    <ul class="navbar-nav" style="margin-left:auto;">
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("home")">بازگشت</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("student")">دانش آموزان</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Teacher")">معلمین</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Class")">کلاس ها</a>
+        </li>
+
+    </ul>
+
+</nav>
+
+    <ul class="list-group" id="accordion">
+        <li data-toggle="collapse" href="#collapseOne" class="mg list-group-item d-flex justify-content-between align-items-center active">
+            دانش آموزان
+            <span class="badge badge-danger badge-pill">@Model.student.Count</span>
+        </li>
+        <ul id="collapseOne" class="list-group collapse " data-parent="#accordion">
+            @foreach (var item in Model.student)
+            {
+                string surl = Url.Action("getstudent") + "?id=" + item.Id;
+                <li class="list-group-item" href="@surl"><a href="@surl">@item.Name</a></li>
+            }
+            
+        </ul>
+        <li data-toggle="collapse" href="#collapse2" class="mg list-group-item d-flex justify-content-between align-items-center active">
+            معلمان
+            <span class="badge badge-danger badge-pill">@Model.teachers.Count</span>
+        </li>
+        <ul id="collapse2" class="list-group collapse " data-parent="#accordion">
+            @foreach (var item in Model.teachers)
+            {
+                int count=0;
+                foreach(var t in item.classes)
+                {
+                    count += t.Students.Count;
+                }
+                string turl = Url.Action("getTeacher") + "?id=" + item.Id;
+                <li class="list-group-item d-flex justify-content-between align-items-center " href="@turl"><a href="@turl">@item.Name</a><span class="badge badge-primary badge-pill">@count</span></li>
+            }
+
+        </ul>
+        <li data-toggle="collapse" href="#collapse3" class="mg list-group-item d-flex justify-content-between align-items-center active">
+            کلاس ها
+            <span class="badge badge-danger badge-pill">@Model.classroom.Count</span>
+        </li>
+        <ul id="collapse3" class="list-group collapse " data-parent="#accordion">
+            @foreach (var item in Model.classroom)
+            {
+                int count = item.Students.Count;
+                string curl = Url.Action("getClass") + "?id=" + item.Id;
+                <li class="list-group-item  d-flex justify-content-between align-items-center " href="@curl"><a href="@curl">@item.Name</a><span class="badge badge-primary badge-pill">@count</span></li>
+            }
+
+        </ul>
+    </ul>
+    <script src="~/scripts/jquery-1.10.2.min.js"></script>
+    <script>
+        $("#q").keyup(function () {
+
+                        $.ajax({
+                            url: "/Search" + "?" + "serch=" + $("#q").val()+"&all=true",
+                            type: "Get",
+                            data: {}
+                        }).done(function (result) {
+                            if ($("#q").val().length < 3) {
+                                $("#SearchResualt").css('display', 'none');
+                            }
+                            else {
+                                $("#SearchResualt").css('display', 'block');
+                            }
+                            $("#SearchResualt").html('');
+                            $("#SearchResualt").append(result);
+                            $("#moreLi").addClass("d-none");
+                        });
+
+                    })
+
+    </script>

@@ -1,0 +1,59 @@
+﻿@model school_Management.Models.classList
+@using school_Management.database;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <title>Class</title>
+</head>
+<body>
+    <div class="container">
+        
+        @foreach (classroom item in Model.list)
+        {
+            string id = "#collapse" + item.Id;
+            string tid = "collapse" + item.Id;
+            
+            string turl = Url.Action("getTeacher") + "?id=" + item.Id;
+            <div id="accordion">
+                <div class="card">
+                    <div class="card-header">
+                        
+                        <a class="card-link" data-toggle="collapse" href="@id">
+                            کلاس:@item.Name
+                        </a>
+                    </div>
+                    <div id="@tid" class="collapse" data-parent="#accordion">
+                        <div class="card-body">
+                            <span>معلم :</span><a href="@turl"><span>@item.Teacher.Name</span></a>
+                            <ul>
+                                @foreach(Students s in item.Students)
+                                {
+                                    string surl = Url.Action("getstudent") + "?id=" + item.Id;
+                                    <li><a href="@surl"><span>@s.Id</span>:<span>@s.Name</span></a></li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        }
+    </div>
+        
+        <script>
+
+        </script>
+    
+</body>
+</html>

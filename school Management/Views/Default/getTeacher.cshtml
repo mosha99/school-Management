@@ -1,0 +1,59 @@
+﻿@model school_Management.database.Teachers
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>getstudent</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        * {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="container">
+        <h1>آقای @Model.Name</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>شماره</th>
+                    <th>نام دانش آموز</th>
+                    <th>نام کلاس</th>
+                    
+
+                </tr>
+            </thead>
+            @foreach (var item in Model.classes)
+            {
+                string curl = Url.Action("getClass") + "?id=" + item.Id;
+                foreach (var i in item.Students)
+                {
+                    string surl = Url.Action("getstudent") + "?id=" + i.Id;
+
+                    <tbody>
+                        <tr>
+                            <td><a href="@surl">@i.Id</a></td>
+                            <td><a href="@surl">@i.Name</a></td>
+                            <td><a href="@curl">@item.Name</a></td>
+                        </tr>
+                    </tbody>
+                }
+
+            }
+
+        </table>
+    </div>
+</body>
+</html>

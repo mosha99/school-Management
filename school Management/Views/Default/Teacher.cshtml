@@ -1,0 +1,71 @@
+﻿@model school_Management.Models.teacherList
+@using school_Management.database;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <title>Class</title>
+</head>
+<body>
+    <div class="container">
+
+        @foreach (Teachers item in Model.List)
+        {
+            string id = "#collapse" + item.Id;
+            string tid = "collapse" + item.Id;
+
+            <div id="accordion">
+                <div class="card">
+                    <div class="card-header">
+
+                        <a class="card-link" data-toggle="collapse" href="@id">
+                            نام:@item.Name
+                        </a>
+                    </div>
+                    <div id="@tid" class="collapse" data-parent="#accordion">
+                        <div class="card-body">
+                            <span> کلاس ها :</span>
+                            <ul>
+                                @foreach (classroom c in item.classes)
+                                {
+                                    
+                                    string curl = Url.Action("getClass") + "?id=" + item.Id;
+                                    <li><a href="@curl"><span>@c.Id<span>:</span>@c.Name</span></a></li>
+                                }
+                            </ul>
+                            <span> دانش آموزان :</span>
+                            <ul>
+                                @foreach (classroom c in item.classes)
+                                {
+                                    foreach (Students s in c.Students)
+                                    {
+                                        string surl = Url.Action("getstudent") + "?id=" + item.Id;
+                                        <li><a href="@surl"><span>@s.Id</span>:<span>@s.Name</span></a></li>
+                                    }
+
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+
+    <script>
+
+    </script>
+
+</body>
+</html>

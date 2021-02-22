@@ -1,0 +1,164 @@
+﻿@model school_Management.Models.serch
+@using  school_Management.database;
+@using  school_Management.Models;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>getstudent</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        * {
+            text-align: center;
+        }
+        #rs{
+            margin-right:5px;
+            margin-left:5px;
+        }
+        #q{
+            margin-right:0 !important;
+            margin-left:0;
+        }
+        #SearchResualt{
+            right: 0;
+            left: 0;
+            display: block;
+            position: absolute;
+            background: aliceblue;
+            text-align: center;
+        }
+        .list-group-item {
+            
+            position: relative;
+            display: block;
+            padding: .75rem 1.25rem;
+            background-color: aliceblue; 
+            border: none; 
+        }
+        span {
+            color: black;
+            font-weight: 700;
+            /* border-bottom: 2px solid; */
+            /* width: 100%; */
+        }
+        hr {
+            margin-top: 1rem;
+            margin-bottom: ;
+            border: 0;
+            border-top: 3px solid rgba(0,0,0,.1);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark ">
+
+        @using (Html.BeginForm("Searchs", "Default", FormMethod.Post, new { @class = "form-inline " }))
+        {
+            <div id="rs" style="position:relative;">
+                <input id="q" class="form-control mr-sm-2" style="margin-right:0;" name="serch" type="text" placeholder="Search">
+                <ul id="SearchResualt" class="list-group"></ul>
+            </div>
+            <button class="btn btn-success" type="submit">Search</button>
+        }
+        <ul class="navbar-nav" style="margin-left:auto;">
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("home")">بازگشت</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("student")">دانش آموزان</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Teacher")">معلمین</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Class")">کلاس ها</a>
+            </li>
+
+        </ul>
+
+    </nav>
+    <div class="container">
+<h1 style="margin-left:auto;margin-right:auto;">جست و جو</h1>
+        
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>شماره</th>
+                    <th>نام</th>
+                    <th>نوع</th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (Model.student != null && Model.student.Count != 0)
+            {
+                foreach (Students item in Model.student)
+                {
+                    string surl = Url.Action("getstudent") + "?id=" + item.Id;
+                    <tr>
+                        <td><a href="">@item.Id</a> </td>
+                        <td><a href="@surl">@item.Name</a></td>
+                        <td><a href="">دانش آموز</a></td>
+                    </tr>
+                }
+            }
+            @if (Model.teachers != null && Model.teachers.Count != 0)
+            {
+                  foreach (Teachers item in Model.teachers)
+                  {
+                      string turl = Url.Action("getTeacher") + "?id=" + item.Id;
+                    <tr>
+                        <td><a href="">@item.Id</a> </td>
+                        <td><a href="@turl">@item.Name</a></td>
+                        <td><a href="">معلم</a></td>
+                    </tr>
+                  }
+             }
+            @if (Model.classroom != null && Model.classroom.Count != 0)
+            {
+                foreach (classroom item in Model.classroom)
+                {
+                    string curl = Url.Action("getClass") + "?id=" + item.Id;
+                    <tr>
+                        <td><a href="">@item.Id</a> </td>
+                        <td><a href="@curl">@item.Name</a></td>
+                        <td><a href="">کلاس درس</a></td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+    <script src="~/scripts/jquery-1.10.2.min.js"></script>
+    <script>
+        $("#q").keyup(function () {
+
+                        $.ajax({
+                            url: "/Search" + "?" + "serch=" + $("#q").val()+"&all=true",
+                            type: "Get",
+                            data: {}
+                        }).done(function (result) {
+                            if ($("#q").val().length < 3) {
+                                $("#SearchResualt").css('display', 'none');
+                            }
+                            else {
+                                $("#SearchResualt").css('display', 'block');
+                            }
+                            $("#SearchResualt").html('');
+                            $("#SearchResualt").append(result);
+                            $("#moreLi").addClass("d-none");
+                        });
+
+                    })
+
+    </script>
+</body>
+</html>
+

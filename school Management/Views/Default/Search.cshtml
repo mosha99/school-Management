@@ -1,0 +1,44 @@
+﻿@model school_Management.Models.serch
+
+@{
+    //string turl = Url.Action("getTeacher") + "?id=" + item.Id;
+    //string curl = Url.Action("getClass") + "?id=" + item.Id;
+    //string curl = Url.Action("getClass") + "?id=" + item.Id;
+} 
+
+    @if (Model.student != null && Model.student.Count != 0)
+    {
+        <br />
+        <span>دانش آموز</span>
+        <hr />
+        foreach (var item in Model.student)
+        {
+            string surl = Url.Action("getstudent") + "?id=" + item.Id;
+            <li class="list-group-item">  <a id="" class="find btn btn-block" href="@surl">@item.Name</a> </li>
+        }
+    }
+    @if (Model.teachers != null&& Model.teachers.Count!=0)
+    {<br />
+        <span>معلم</span>
+        <hr />
+        foreach (var item in Model.teachers)
+        {
+            string turl = Url.Action("getTeacher") + "?id=" + item.Id;
+             <li class="list-group-item"> <a id="" class="find btn btn-block"href="@turl">@item.Name</a> </li>
+        }
+    }
+    @if (Model.classroom != null&& Model.classroom.Count != 0)
+    {<br />
+        <span>کلاس</span>
+        <hr />
+        foreach (var item in Model.classroom)
+        {
+            string curl = Url.Action("getClass") + "?id=" + item.Id;
+            <li class="list-group-item">  <a id="" class="find btn btn-block" href="@curl">@item.Name</a> </li>
+        }
+    }
+@if (ViewBag.count > 3)
+{
+    <li class="list-group-item" id="moreLi">  <span id="more" class="btn btn-block btn-info text-center label label-success">مشاهده بیشتر</span></li>
+
+}
