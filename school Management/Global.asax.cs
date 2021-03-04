@@ -13,6 +13,11 @@ namespace school_Management
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+            int s;
+
+
+
         }
     }
 }
